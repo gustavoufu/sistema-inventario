@@ -6,6 +6,7 @@ class Status_dos_Ativos(Enum):
     MANUTENCAO = "manutenção"
 
 nome = input("Digite o nome do ativo: ")
+print("Opções disponíveis: [ativo], [inativo], [manutenção]")
 status_entrada = input("Digite o status do ativo: ")
 
 status = Status_dos_Ativos(status_entrada)
