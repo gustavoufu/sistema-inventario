@@ -10,7 +10,13 @@ def verificar_int(mensagem): #VERIFICAR INT É LIGADO A UMA MENSAGEM INPUT
         else: 
             return inteiro
 
-lista_ativos = []
+
+
+try: 
+    with open("arquivoativos.json", "r", encoding="utf-8") as arquivolista:
+        lista_ativos = json.load(arquivolista)
+except (FileNotFoundError, json.JSONDecodeError):
+     lista_ativos = []
 
 
 
@@ -37,6 +43,11 @@ while True: #EXIBE AS OPCOES DO CRUD
                             "vulnerabilidade": input("Digite a vulnerabilidade: "),
                             "severidade": input("Digite um nível de severidade [1 até 5]: ")}
         lista_ativos.append(dados_ativo_novo)
+        try: #ARMAZENA A NOVA MODIFICACAO NO ARQUIVO COM A LISTA DE ATIVOS
+             with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
+                  json.dump(lista_ativos, arquivolista)
+        except OSError: print("Não foi possível salvar os dados no arquivo.")
+
 
     elif opcao == 2: #LISTA TODOS OS DICIONARIOS NA LISTA "LISTA_ATIVOS"
         print("-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-")
@@ -44,7 +55,8 @@ while True: #EXIBE AS OPCOES DO CRUD
         for posicao, ativo in enumerate(lista_ativos):
             print(f"{posicao + 1} - {ativo['nome']}")
 
-    elif opcao == 3:
+
+    elif opcao == 3: #EXIBE A LISTA DE ATIVOS CADASTRADOS PARA ESCOLHA DE REMOCAO DE ATIVO
         print("-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-")
         print("")
         print("Qual ativo você deseja remover?")
@@ -57,6 +69,10 @@ while True: #EXIBE AS OPCOES DO CRUD
             escolha_rem = verificar_int("Escolha um ativo: ")
             if 1 <= escolha_rem <= len(lista_ativos):
                 del lista_ativos[escolha_rem - 1]
+                try: #ARMAZENA A NOVA MODIFICACAO NO ARQUIVO COM A LISTA DE ATIVOS
+                     with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
+                            json.dump(lista_ativos, arquivolista)
+                except OSError: print("Não foi possível salvar os dados no arquivo.")
                 break
             else: 
                  print("Essa opção não está disponível")
