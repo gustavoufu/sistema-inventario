@@ -8,7 +8,12 @@ while True:
                   "setor": input("Digite o setor do ativo: "),
                   "vulnerabilidade": input("Digite a vulnerabilidade do ativo")}
     lista_ativos.append(temp_ativo)
-    break
+
+    escolha = input("Deseja cadastrar mais um ativo? [S/N]")
+    if escolha == "s":
+        continue
+    if escolha == "n":
+        break
 
 
 with open("estudos/Vulnerabilidades.json", "w") as vulne:
