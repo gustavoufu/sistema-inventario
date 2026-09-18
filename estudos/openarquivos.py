@@ -43,9 +43,11 @@ while True: #EXIBE AS OPCOES DO CRUD
                             "vulnerabilidade": input("Digite a vulnerabilidade: "),
                             "severidade": input("Digite um nível de severidade [1 até 5]: ")}
         lista_ativos.append(dados_ativo_novo)
+        print("")
         try: #ARMAZENA A NOVA MODIFICACAO NO ARQUIVO COM A LISTA DE ATIVOS
              with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
                   json.dump(lista_ativos, arquivolista)
+                  print("Ativo cadastrado com sucesso!")
         except OSError: print("Não foi possível salvar os dados no arquivo.")
 
 
