@@ -52,8 +52,8 @@ while True: #EXIBE AS OPCOES DO CRUD
     elif opcao == 2: #LISTA TODOS OS DICIONARIOS NA LISTA "LISTA_ATIVOS"
         print("-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-")
         print("")
-        for posicao, ativo in enumerate(lista_ativos):
-            print(f"{posicao + 1} - {ativo['nome']}")
+        for posicao, ativo in enumerate(lista_ativos, start=1):
+            print(f"{posicao} - {ativo['nome']}")
 
 
     elif opcao == 3: #EXIBE A LISTA DE ATIVOS CADASTRADOS PARA ESCOLHA DE REMOCAO DE ATIVO
