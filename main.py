@@ -88,7 +88,7 @@ while True: #EXIBE AS OPCOES DO CRUD
             print(f"ID:{ativo['id']} - {ativo['nome']}")
         print("")
 
-        while True: #CRIA UM LOOP PARA SELECIONAR UMA POSICAO DE ATIVO VALIDA PARA EXCLUIR
+        while True: #CRIA UM LOOP PARA SELECIONAR UM ID DE ATIVO VALIDA PARA EXCLUIR
             escolha_rem = verificar_int("Digite o ID do ativo a ser removido: ")
             
             encontrado = False
@@ -99,8 +99,8 @@ while True: #EXIBE AS OPCOES DO CRUD
                     print("Ativo removido!")
                     break
 
-                if not encontrado:
-                    print("Esse ID não foi encontrado!")
+            if not encontrado:
+                print("Esse ID não foi encontrado!")
 
             try: #ARMAZENA A NOVA MODIFICACAO NO ARQUIVO COM A LISTA DE ATIVOS
                     with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
