@@ -84,31 +84,33 @@ def pedir_tipo_de_ativo():  # PEDE O TIPO DE ATIVO E VERIFICA SE É NUMERO INTEI
 
 
 
-try: #PEGA A ATUAL LISTA DE ATIVOS DO ARQUIVO JSON, SE NAO EXISTIR CRIA UMA LISTA VAZIA
+try: #LEITURA DO JSON INICIAL PARA CARREGAR A LISTA DE ATIVOS CADASTRADOS
     with open("arquivoativos.json", "r", encoding="utf-8") as arquivolista:
         lista_ativos = json.load(arquivolista)
 except (FileNotFoundError, json.JSONDecodeError):
     lista_ativos = []
 
 
-while True:  # EXIBE AS OPCOES DO CRUD 
+while True:  # EXIBE AS OPÇÕES DO CRUD
     opcao = verificar_int("""
-    -=-=-=-=-= OPÇÕES DE ATIVO =-=-=-=-=-=-
+-=-=-=-=-=-=-= MENU PRINCIPAL =-=-=-=-=-=--=-=
 
-    1 - Cadastro de ativos
-    2 - Listar ativos
-    3 - Remover ativos
-    4 - Atualizar ativos                     
-    5 - Sair
+1 - Cadastro de ativos
+2 - Listar ativos
+3 - Buscar e Consultar ativos
+4 - Remover ativos
+5 - Sair
 
-    Escolha uma opção: """)
-
+Escolha uma opção: """)
+    
     if opcao not in range(1, 6):  # AVISA ERRO -> SE COLOCAR OPCAO QUE NAO EXISTE
         print("")
         print("ERRO: Essa opção não está disponível...")
         continue
 
-    elif opcao == 1:  # COLETA DADOS DO NOVO ATIVO PARA SUBIR NA LISTA DE DICIONARIOS
+    elif opcao == 1:  # CADASTRO DE NOVO ATIVO
+        print("")
+        print("-=-=-=-=-=- CADASTRO DE NOVO ATIVO -=-=-=-=-=-=-")
         print("")
         if lista_ativos:
             novo_id = max(ativo["id"] for ativo in lista_ativos) + 1
@@ -123,26 +125,105 @@ while True:  # EXIBE AS OPCOES DO CRUD
             "tipo": exibir_tipos_de_ativos() or pedir_tipo_de_ativo(),
             "vulnerabilidades": [],
         }
-        lista_ativos.append(dados_ativo_novo)
         print("")
+        lista_ativos.append(dados_ativo_novo)
+
         try:  # ARMAZENA A NOVA MODIFICACAO NO ARQUIVO COM A LISTA DE ATIVOS
             with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
                 json.dump(lista_ativos, arquivolista)
-                print("Ativo cadastrado com sucesso!")
+                print("""-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+    Ativo cadastrado com sucesso!""")
         except OSError:
             print("Não foi possível salvar os dados no arquivo.")
 
-    elif opcao == 2:  # LISTA TODOS OS DICIONARIOS NA LISTA "LISTA_ATIVOS"
-        print("-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-")
+    elif opcao == 2:  # LISTAGEM DE ATIVOS CADASTRADOS
         print("")
-        for ativo in lista_ativos:
-            print(f"ID:{ativo['id']} - {ativo['nome']}")
+        if lista_ativos == []:
+            print("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
+            print("")
+            print("Não há ativos cadastrados!")
+            continue
+        else:
+            print("-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-")
+            print("")
+            for ativo in lista_ativos:
+                print(f"ID:{ativo['id']} - {ativo['nome']}")
 
-    elif opcao == 3:  # EXIBE A LISTA DE ATIVOS CADASTRADOS PARA ESCOLHA DE REMOCAO DE ATIVO
-        print("-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-")
-        print("")
-        print("Qual ativo você deseja remover?")
-        print("")
+    elif opcao == 3: # BUSCA E CONSULTA DE ATIVOS
+        print("""
+    -=-=-=-=-=- OPÇÕES =-=-=-=-=-=-
+
+    1 - Buscar por ID
+    2 - Buscar por Nome
+    3 - Voltar ao menu principal
+    """)
+        
+        while True:
+            busca_opcao = verificar_int("Escolha uma opção: ")
+            if busca_opcao not in range(1, 4):
+                print("Essa opção não está disponível, Tente novamente!")
+                continue
+            else: break
+
+        if busca_opcao == 1:
+            id_digitado = verificar_int("Digite o ID do ativo que deseja buscar: ")
+            print("")
+            if id_digitado not in [ativo["id"] for ativo in lista_ativos]:
+                print("")
+                print("Esse ID não foi encontrado!")
+                continue
+            else:
+                for ativo in lista_ativos:
+                    if ativo["id"] == id_digitado:
+                        print("-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-")
+                        print(f"ID: {ativo['id']}")
+                        print(f"Nome: {ativo['nome']}")
+                        print(f"Responsável: {ativo['responsavel']}")
+                        print(f"Setor: {ativo['setor']}")
+                        print(f"Tipo: {TiposDeAtivos(ativo['tipo']).name}") 
+                        # essa parte caça dentro do dicionario "ativo" o valor da key "tipo",
+                        # manda o valor pra enumeracao e procura o nome para tal valor
+                        print(f"Vulnerabilidades: {ativo['vulnerabilidades']}")
+
+        elif busca_opcao == 2: 
+            nome_digitado = input("Digite o nome do ativo que deseja buscar: ").strip()
+            encontrado = False
+            # encontrado false serve para, caso nao seja encontrado o nome do ativo, continue false e assim possa rodar o print 
+            # de aviso "nao encontrado"
+            for ativo in lista_ativos:
+                if ativo["nome"].lower() == nome_digitado.lower():
+                    # os lower() é só pra garantir que ambos textos estejam minusculos, ou seja, iguais
+                    print("-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-")
+                    print(f"ID: {ativo['id']}")
+                    print(f"Nome: {ativo['nome']}")
+                    print(f"Responsável: {ativo['responsavel']}")
+                    print(f"Setor: {ativo['setor']}")
+                    print(f"Tipo: {TiposDeAtivos(ativo['tipo']).name}") 
+                    # essa parte caça dentro do dicionario "ativo" o valor da key "tipo",
+                    # manda o valor pra enumeracao e procura o nome para tal valor
+                    print(f"Vulnerabilidades: {ativo['vulnerabilidades']}")
+                    print("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
+                    encontrado = True
+            if not encontrado:
+                print("Esse nome não foi encontrado!")
+
+        if busca_opcao == 3:
+            continue
+
+    elif opcao == 4:  #REMOÇÃO DE ATIVOS
+        if lista_ativos == []:
+            print("""
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+    
+    Não há ativos cadastrados!""")
+            continue
+        
+        print("""
+-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-
+
+Qual ativo você deseja remover?
+    """)
         for ativo in lista_ativos:
             print(f"ID:{ativo['id']} - {ativo['nome']}")
         print("")
@@ -155,6 +236,7 @@ while True:  # EXIBE AS OPCOES DO CRUD
                 if ativo["id"] == escolha_rem:
                     lista_ativos.remove(ativo)
                     encontrado = True
+                    print("")
                     print("Ativo removido!")
                     break
 
@@ -168,8 +250,6 @@ while True:  # EXIBE AS OPCOES DO CRUD
                 print("Não foi possível salvar os dados no arquivo.")
             break
 
-    elif opcao == 4:
-        ativo_escolhido = input("Digite o id do ativo: ")
-
-    elif opcao == 5:
+    elif opcao == 5: #SAIR DO PROGRAMA
         break
+        
