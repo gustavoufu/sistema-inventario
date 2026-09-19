@@ -99,7 +99,7 @@ while True: #EXIBE AS OPCOES DO CRUD
                     print("Ativo removido!")
                     break
 
-                if not encontrado:
+            if not encontrado:
                     print("Esse ID não foi encontrado!")
 
             try: #ARMAZENA A NOVA MODIFICACAO NO ARQUIVO COM A LISTA DE ATIVOS
