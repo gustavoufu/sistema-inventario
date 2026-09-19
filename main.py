@@ -42,18 +42,24 @@ while True: #EXIBE AS OPCOES DO CRUD
     1 - Cadastro de ativos
     2 - Listar ativos
     3 - Remover ativos
-    4 - Sair
+    4 - Atualizar ativos                     
+    5 - Sair
 
     Escolha uma opção: """)
 
-    if opcao not in range(1, 5): #AVISA ERRO -> SE COLOCAR OPCAO QUE NAO EXISTE
+    if opcao not in range(1, 6): #AVISA ERRO -> SE COLOCAR OPCAO QUE NAO EXISTE
         print("")
         print("ERRO: Essa opção não está disponível...")
         continue
 
     elif opcao == 1: #COLETA DADOS DO NOVO ATIVO PARA SUBIR NA LISTA DE DICIONARIOS
         print("")
-        dados_ativo_novo = {"nome": input("Digite um nome para o ativo: "),
+        if lista_ativos:
+            novo_id = max(ativo["id"] for ativo in lista_ativos) + 1
+        else: novo_id = 1
+
+        dados_ativo_novo = {"id": novo_id,
+                            "nome": input("Digite um nome para o ativo: "),
                             "setor": input("Digite o setor responsável: "),
                             "vulnerabilidade": input("Digite a vulnerabilidade: "),
                             "severidade": pedir_severidade()}
@@ -69,8 +75,8 @@ while True: #EXIBE AS OPCOES DO CRUD
     elif opcao == 2: #LISTA TODOS OS DICIONARIOS NA LISTA "LISTA_ATIVOS"
         print("-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-")
         print("")
-        for posicao, ativo in enumerate(lista_ativos, start=1):
-            print(f"{posicao} - {ativo['nome']}")
+        for ativo in lista_ativos:
+            print(f"ID:{ativo['id']} - {ativo['nome']}")
 
 
     elif opcao == 3: #EXIBE A LISTA DE ATIVOS CADASTRADOS PARA ESCOLHA DE REMOCAO DE ATIVO
@@ -78,21 +84,34 @@ while True: #EXIBE AS OPCOES DO CRUD
         print("")
         print("Qual ativo você deseja remover?")
         print("")
-        for posicao, ativo in enumerate(lista_ativos, start=1):
-                    print(f"{posicao} - {ativo['nome']}")
+        for ativo in lista_ativos:
+            print(f"ID:{ativo['id']} - {ativo['nome']}")
         print("")
 
         while True: #CRIA UM LOOP PARA SELECIONAR UMA POSICAO DE ATIVO VALIDA PARA EXCLUIR
-            escolha_rem = verificar_int("Escolha um ativo: ")
-            if 1 <= escolha_rem <= len(lista_ativos):
-                del lista_ativos[escolha_rem - 1]
-                try: #ARMAZENA A NOVA MODIFICACAO NO ARQUIVO COM A LISTA DE ATIVOS
-                     with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
-                            json.dump(lista_ativos, arquivolista)
-                except OSError: print("Não foi possível salvar os dados no arquivo.")
-                break
-            else: 
-                 print("Essa opção não está disponível")
-                 continue
+            escolha_rem = verificar_int("Digite o ID do ativo a ser removido: ")
+            
+            encontrado = False
+            for ativo in lista_ativos:
+                if ativo["id"] == escolha_rem:
+                    lista_ativos.remove(ativo)
+                    encontrado = True
+                    print("Ativo removido!")
+                    break
+
+                if not encontrado:
+                    print("Esse ID não foi encontrado!")
+
+            try: #ARMAZENA A NOVA MODIFICACAO NO ARQUIVO COM A LISTA DE ATIVOS
+                    with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
+                        json.dump(lista_ativos, arquivolista)
+            except OSError: print("Não foi possível salvar os dados no arquivo.")
+            break
+            
     elif opcao == 4:
+         ativo_escolhido = input("Digite o id do ativo: ")
+
+         
+
+    elif opcao == 5:
          break
