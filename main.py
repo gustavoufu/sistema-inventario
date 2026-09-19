@@ -1,4 +1,11 @@
 import json
+from enum import Enum
+
+class TiposDeAtivos(Enum):
+    Notebook = 1
+    Servidor = 2
+    Roteador = 3
+    Aplicativo = 4
 
 
 def verificar_int(mensagem):  # VERIFICAR INT É LIGADO A UMA MENSAGEM INPUT
@@ -10,6 +17,36 @@ def verificar_int(mensagem):  # VERIFICAR INT É LIGADO A UMA MENSAGEM INPUT
             continue
         else:
             return inteiro
+
+
+def pedir_nome(): #PEDE O NOME DO ATIVO E VERIFICA SE É VAZIO
+    while True:
+        nome = input("Digite o nome do ativo: ").strip()
+        if nome == "":
+            print("ERRO, digite um nome válido...")
+            continue
+        else:
+            return nome
+
+
+def pedir_responsavel():  # PEDE O RESPONSAVEL E VERIFICA SE É VAZIO
+    while True:
+        responsavel = input("Digite o responsável pelo ativo: ").strip()
+        if responsavel == "":
+            print("ERRO, digite um nome válido...")
+            continue
+        else:
+            return responsavel
+
+
+def pedir_setor():  # PEDE O SETOR E VERIFICA SE É VAZIO
+    while True:
+        setor = input("Digite o setor responsável: ").strip()
+        if setor == "":
+            print("ERRO, digite um nome válido...")
+            continue
+        else:
+            return setor
 
 
 def pedir_severidade():  # PEDE A SEVERIDADE E VERIFICA SE É NUMERO INTEIRO DE 1 A 4
@@ -26,14 +63,35 @@ def pedir_severidade():  # PEDE A SEVERIDADE E VERIFICA SE É NUMERO INTEIRO DE 
             return severidade
 
 
-try:
+def exibir_tipos_de_ativos():  # EXIBE OS TIPOS DE ATIVOS DISPONIVEIS
+    print("-=-=-=-=- Tipos de ativos disponíveis -=-=-=-=-")
+    for tipo in TiposDeAtivos:
+        print(f"{tipo.value} - {tipo.name}")
+
+
+def pedir_tipo_de_ativo():  # PEDE O TIPO DE ATIVO E VERIFICA SE É NUMERO INTEIRO DE 1 A 4
+    while True:
+        try:
+            tipo = int(input(f"Digite o tipo do ativo [1 até {len(TiposDeAtivos)}]: "))
+            if tipo not in range(1, len(TiposDeAtivos) + 1):
+                print(f"O número digitado não é um valor de 1 a {len(TiposDeAtivos)}")
+                continue
+        except (ValueError, TypeError):
+            print("ERRO, digite um número inteiro válido...")
+            continue
+        else:
+            return tipo
+
+
+
+try: #PEGA A ATUAL LISTA DE ATIVOS DO ARQUIVO JSON, SE NAO EXISTIR CRIA UMA LISTA VAZIA
     with open("arquivoativos.json", "r", encoding="utf-8") as arquivolista:
         lista_ativos = json.load(arquivolista)
 except (FileNotFoundError, json.JSONDecodeError):
     lista_ativos = []
 
 
-while True:  # EXIBE AS OPCOES DO CRUD
+while True:  # EXIBE AS OPCOES DO CRUD 
     opcao = verificar_int("""
     -=-=-=-=-= OPÇÕES DE ATIVO =-=-=-=-=-=-
 
@@ -57,12 +115,13 @@ while True:  # EXIBE AS OPCOES DO CRUD
         else:
             novo_id = 1
 
-        dados_ativo_novo = {
+        dados_ativo_novo = { #CADASTRO DE NOVO ATIVO COM DICIONARIO
             "id": novo_id,
-            "nome": input("Digite um nome para o ativo: "),
-            "setor": input("Digite o setor responsável: "),
-            "vulnerabilidade": input("Digite a vulnerabilidade: "),
-            "severidade": pedir_severidade(),
+            "nome": pedir_nome(),
+            "responsavel": pedir_responsavel(),
+            "setor": pedir_setor(),
+            "tipo": exibir_tipos_de_ativos() or pedir_tipo_de_ativo(),
+            "vulnerabilidades": [],
         }
         lista_ativos.append(dados_ativo_novo)
         print("")
