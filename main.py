@@ -1,6 +1,11 @@
 import json
 from enum import Enum
 
+VERMELHO = "\033[1;31m" #variaveis que mostram cores com ANSI
+VERDE = "\033[1;32m"
+TITULO = "\033[1;36m"
+NORMAL = "\033[0m"
+
 class TiposDeAtivos(Enum):
     Notebook = 1
     Servidor = 2
@@ -28,7 +33,7 @@ def verificar_int(mensagem): # VERIFICAR INT É LIGADO A UMA MENSAGEM INPUT
         try:
             inteiro = int(input(mensagem))
         except (ValueError, TypeError):
-            print("ERRO, digite um número inteiro válido...")
+            print(f"{VERMELHO}ERRO, digite um número inteiro válido...{NORMAL}")
             continue
         else:
             return inteiro
@@ -38,7 +43,7 @@ def pedir_input(mensagem): # PEDE TEXTO E VERIFICA SE É VAZIO
     while True:
         texto = input(mensagem).strip()
         if texto == "":
-            print("ERRO, digite um texto válido...")
+            print(f"{VERMELHO}ERRO, digite um texto válido...{NORMAL}")
             continue
         else:
             return texto
@@ -49,10 +54,10 @@ def pedir_severidade(): # PEDE A SEVERIDADE E VERIFICA SE É NUMERO INTEIRO DE 1
         try:
             severidade = int(input("Digite um nível de severidade [1 até 4]: "))
             if severidade not in range(1, 5):
-                print("O número digitado não é um valor de 1 a 4")
+                print(f"{VERMELHO}O número digitado não é um valor de 1 a 4{NORMAL}")
                 continue
         except (ValueError, TypeError):
-            print("ERRO, digite um número inteiro válido...")
+            print(f"{VERMELHO}ERRO, digite um número inteiro válido...{NORMAL}")
             continue
         else:
             return severidade
@@ -60,7 +65,7 @@ def pedir_severidade(): # PEDE A SEVERIDADE E VERIFICA SE É NUMERO INTEIRO DE 1
 
 def exibir_tipos_de_ativos(): # EXIBE OS TIPOS DE ATIVOS DISPONIVEIS
     print("")
-    print("-=-=-=-=- TIPO DE ATIVOS DISPONÍVEIS -=-=-=-=-")
+    print(f"{TITULO}-=-=-=-=- TIPO DE ATIVOS DISPONÍVEIS -=-=-=-=-{NORMAL}")
     print("")
     for tipo in TiposDeAtivos:
         print(f"{tipo.value} - {tipo.name}")
@@ -72,10 +77,10 @@ def pedir_tipo_de_ativo(): # PEDE O TIPO DE ATIVO E VERIFICA SE É NUMERO INTEIR
             print("")
             tipo = int(input(f"Digite o tipo do ativo [1 até {len(TiposDeAtivos)}]: "))
             if tipo not in range(1, len(TiposDeAtivos) + 1):
-                print(f"O número digitado não é um valor de 1 a {len(TiposDeAtivos)}")
+                print(f"{VERMELHO}O número digitado não é um valor de 1 a {len(TiposDeAtivos)}{NORMAL}")
                 continue
         except (ValueError, TypeError):
-            print("ERRO, digite um número inteiro válido...")
+            print(f"{VERMELHO}ERRO, digite um número inteiro válido...{NORMAL}")
             continue
         else:
             return tipo
@@ -114,8 +119,8 @@ except (FileNotFoundError, json.JSONDecodeError):
 
 
 while True:  # EXIBE AS OPÇÕES DO CRUD
-    opcao = verificar_int("""
--=-=-=-=-=-=-= MENU PRINCIPAL =-=-=-=-=-=--=-=
+    opcao = verificar_int(f"""
+{TITULO}-=-=-=-=-=-=-= MENU PRINCIPAL =-=-=-=-=-=--=-={NORMAL}
 
 1 - Cadastro de ativos
 2 - Cadastrar vulnerabilidades
@@ -129,12 +134,12 @@ Escolha uma opção: """)
     
     if opcao not in range(1, 8):  # AVISA ERRO -> SE COLOCAR OPCAO QUE NAO EXISTE
         print("")
-        print("ERRO: Essa opção não está disponível...")
+        print(f"{VERMELHO}ERRO: Essa opção não está disponível...{NORMAL}")
         continue
 
     elif opcao == 1: # CADASTRO DE NOVO ATIVO
         print("")
-        print("=-=-=-=-=- CADASTRO DE NOVO ATIVO -=-=-=-=-=-=")
+        print(f"{TITULO}=-=-=-=-=- CADASTRO DE NOVO ATIVO -=-=-=-=-=-={NORMAL}")
         print("")
         if lista_ativos:
             novo_id = max(ativo["id"] for ativo in lista_ativos) + 1
@@ -153,7 +158,7 @@ Escolha uma opção: """)
         lista_ativos.append(dados_ativo_novo)
 
         if salvar_arquivos(lista_ativos):
-            print("Ativo cadastrado com sucesso!")
+            print(f"{VERDE}Ativo cadastrado com sucesso!{NORMAL}")
 
     elif opcao == 2: # CADASTRO DE VULNERABILIDADES
 
@@ -162,7 +167,7 @@ Escolha uma opção: """)
             continue
         else:
             print("")
-            print("=-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-=")
+            print(f"{TITULO}=-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-={NORMAL}")
             print("")
             for ativo in lista_ativos:
                 print(f"ID:{ativo['id']} - {ativo['nome']}")
@@ -192,32 +197,32 @@ Escolha uma opção: """)
 
                         if salvar_arquivos(lista_ativos):
                             print("")
-                            print("Vulnerabilidade cadastrada com sucesso!")
+                            print(f"{VERDE}Vulnerabilidade cadastrada com sucesso!{NORMAL}")
                         break
                     
                 if encontrado:
                     break
 
                 if not encontrado:
-                      print("Esse ID não está cadastrado!")
+                      print(f"{VERMELHO}Esse ID não está cadastrado!{NORMAL}")
                       continue     
 
     elif opcao == 3: # LISTAGEM DE ATIVOS CADASTRADOS
         print("")
         if lista_ativos == []:
-            print("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+            print(f"{TITULO}-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-={NORMAL}")
             print("")
             print("Não há ativos cadastrados!")
             continue
         else:
-            print("=-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-=")
+            print(f"{TITULO}=-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-={NORMAL}")
             print("")
             for ativo in lista_ativos:
                 print(f"ID:{ativo['id']} - {ativo['nome']}")
 
     elif opcao == 4: # BUSCA E CONSULTA DE ATIVOS
-        print("""
-=-=-=-=-=-=-=-=-=-= OPÇÕES =-=-=-=-=-=-=-=-=-=
+        print(f"""
+{TITULO}=-=-=-=-=-=-=-=-=-= OPÇÕES =-=-=-=-=-=-=-=-=-={NORMAL}
 
 1 - Buscar por ID
 2 - Buscar por Nome
@@ -227,7 +232,7 @@ Escolha uma opção: """)
         while True:
             busca_opcao = verificar_int("Escolha uma opção: ")
             if busca_opcao not in range(1, 4):
-                print("Essa opção não está disponível, Tente novamente!")
+                print(f"{VERMELHO}Essa opção não está disponível, Tente novamente!{NORMAL}")
                 continue
             else: break
 
@@ -235,13 +240,13 @@ Escolha uma opção: """)
             id_digitado = verificar_int("Digite o ID do ativo que deseja buscar: ")
             print("")
             if id_digitado not in [ativo["id"] for ativo in lista_ativos]:
-                print("Esse ID não foi encontrado!")
+                print(f"{VERMELHO}Esse ID não foi encontrado!{NORMAL}")
                 continue
             else:
                 for ativo in lista_ativos:
                     if ativo["id"] == id_digitado:
 
-                        print("-=-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-=-")
+                        print(f"{TITULO}-=-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-=-{NORMAL}")
                         print("")
                         Exibe_Dados_ativo(ativo)
                         print("")
@@ -255,13 +260,13 @@ Escolha uma opção: """)
             nome_digitado = input("Digite o nome do ativo que deseja buscar: ").strip()
             print("")
             if nome_digitado.lower() not in (ativo['nome'].lower() for ativo in lista_ativos):
-                print("Esse nome não pertence a um ativo cadastrado!")
+                print(f"{VERMELHO}Esse nome não pertence a um ativo cadastrado!{NORMAL}")
                 continue
             else:
                 for ativo in lista_ativos:
                     if ativo["nome"].lower() == nome_digitado.lower():
                         # os lower() é só pra garantir que ambos textos estejam minusculos, ou seja, iguais
-                        print("-=-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-=-")
+                        print(f"{TITULO}-=-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-=-{NORMAL}")
                         print("")
                         Exibe_Dados_ativo(ativo)
 
@@ -277,14 +282,14 @@ Escolha uma opção: """)
     elif opcao == 5: # ATUALIZAR ATIVOS 
         
         if lista_ativos == []:
-            print("""
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            print(f"""
+{TITULO}-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-={NORMAL}
                 
 Não há ativos cadastrados!""")
 
         else:
-            print("""
-=-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-=
+            print(f"""
+{TITULO}-=-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-={NORMAL}
             
 Qual ativo você deseja atualizar?
                 """)
@@ -301,8 +306,8 @@ Qual ativo você deseja atualizar?
                     if ativo['id'] == id_escolhido:
                         encontrado = True
                         while True:
-                            print("""
--=-=-=-=-=- ATUALIZAÇÃO DE ATIVO -=-=-=-=-=-=-
+                            print(f"""
+{TITULO}-=-=-=-=-=- ATUALIZAÇÃO DE ATIVO -=-=-=-=-=-={NORMAL}
 
 O que deseja atualizar no ativo?
 
@@ -317,27 +322,27 @@ O que deseja atualizar no ativo?
                             print("")
 
                             if escolha_atualizar not in range(1, 6):
-                                print("Essa opção não está disponível!")
+                                print(f"{VERMELHO}Essa opção não está disponível!{NORMAL}")
                                 continue
 
                             elif escolha_atualizar == 1:
                                 print(f"OBS: O nome atual é {ativo['nome']}")
                                 ativo['nome'] = pedir_input(mensagem="Digite o novo nome do ativo: ")
                                 if salvar_arquivos(lista_ativos):
-                                    print("Nome alterado com sucesso!")
+                                    print(f"{VERDE}Nome alterado com sucesso!{NORMAL}")
                                 
 
                             elif escolha_atualizar == 2:
                                 print(f"OBS: O responsável atual é {ativo['responsavel']}")
                                 ativo['responsavel'] = pedir_input(mensagem="Digite o responsável pelo ativo: ")
                                 if salvar_arquivos(lista_ativos):
-                                    print("Responsável alterado com sucesso!")
+                                    print(f"{VERDE}Responsável alterado com sucesso!{NORMAL}")
 
                             elif escolha_atualizar == 3:
                                 print(f"OBS: O setor responsável atual é {ativo['setor']}")
                                 ativo['setor'] = pedir_input(mensagem="Digite o setor responsável: ")
                                 if salvar_arquivos(lista_ativos):
-                                    print("Setor alterado com sucesso!")
+                                    print(f"{VERDE}Setor alterado com sucesso!{NORMAL}")
 
                             elif escolha_atualizar == 4:
                                 print(f"OBS: O ativo atual é do tipo {ativo['tipo']}")
@@ -345,7 +350,7 @@ O que deseja atualizar no ativo?
                                 exibir_tipos_de_ativos()
                                 ativo['tipo'] = pedir_tipo_de_ativo()
                                 if salvar_arquivos(lista_ativos):
-                                    print("Tipo do ativo alterado com sucesso!")
+                                    print(f"{VERDE}Tipo do ativo alterado com sucesso!{NORMAL}")
 
                             elif escolha_atualizar == 5:
                                 break
@@ -354,18 +359,18 @@ O que deseja atualizar no ativo?
                     break 
 
                 if not encontrado:
-                    print("Esse ID não está cadastrado!")
+                    print(f"{VERMELHO}Esse ID não está cadastrado!{NORMAL}")
 
     elif opcao == 6: # REMOÇÃO DE ATIVOS
         if lista_ativos == []:
-            print("""
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            print(f"""
+{TITULO}-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-={NORMAL}
     
     Não há ativos cadastrados!""")
             continue
         
-        print("""
-=-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-=
+        print(f"""
+{TITULO}=-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-={NORMAL}
 
 Qual ativo você deseja remover?
     """)
@@ -383,11 +388,11 @@ Qual ativo você deseja remover?
                     encontrado = True
                     if salvar_arquivos(lista_ativos):
                         print("")
-                        print("Ativo removido com sucesso!")
+                        print(f"{VERDE}Ativo removido com sucesso!{NORMAL}")
                     break
 
             if not encontrado:
-                print("Esse ID não foi encontrado!")
+                print(f"{VERMELHO}Esse ID não foi encontrado!{NORMAL}")
                 continue
 
 
