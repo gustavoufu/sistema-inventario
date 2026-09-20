@@ -9,7 +9,7 @@ class TiposDeAtivos(Enum):
 
 class Severidade_Extenso(Enum):
     Baixa = 1
-    Mdia = 2
+    Média = 2
     Alta = 3
     Crítica = 4
 
@@ -59,7 +59,9 @@ def pedir_severidade():  # PEDE A SEVERIDADE E VERIFICA SE É NUMERO INTEIRO DE 
 
 
 def exibir_tipos_de_ativos():  # EXIBE OS TIPOS DE ATIVOS DISPONIVEIS
+    print("")
     print("-=-=-=-=- Tipos de ativos disponíveis -=-=-=-=-")
+    print("")
     for tipo in TiposDeAtivos:
         print(f"{tipo.value} - {tipo.name}")
 
@@ -67,6 +69,7 @@ def exibir_tipos_de_ativos():  # EXIBE OS TIPOS DE ATIVOS DISPONIVEIS
 def pedir_tipo_de_ativo():  # PEDE O TIPO DE ATIVO E VERIFICA SE É NUMERO INTEIRO DE 1 A 4
     while True:
         try:
+            print("")
             tipo = int(input(f"Digite o tipo do ativo [1 até {len(TiposDeAtivos)}]: "))
             if tipo not in range(1, len(TiposDeAtivos) + 1):
                 print(f"O número digitado não é um valor de 1 a {len(TiposDeAtivos)}")
@@ -78,6 +81,30 @@ def pedir_tipo_de_ativo():  # PEDE O TIPO DE ATIVO E VERIFICA SE É NUMERO INTEI
             return tipo
 
 
+def Exibe_Dados_ativo(ativo):
+    print(f"ID: {ativo['id']}")
+    print(f"Nome: {ativo['nome']}")
+    print(f"Responsável: {ativo['responsavel']}")
+    print(f"Setor: {ativo['setor']}")
+    print(f"Tipo: {TiposDeAtivos(ativo['tipo']).name}") 
+    # essa parte caça dentro do dicionario "ativo" o valor da key "tipo",
+    # manda o valor pra enumeracao e procura o nome para tal valor
+
+
+def Exibe_Vulnerabilidades_ativo(ativo):
+    if len(ativo['vulnerabilidades']) == 0:
+        print("Nenhuma vulnerabilidade cadastrada.")
+    else:
+        print(f"VULNERABILIDADES: ({len(ativo['vulnerabilidades'])})")
+        print("")
+        for posicao, vulnerabilidade in enumerate(ativo['vulnerabilidades'], start=1):
+            print(f"{posicao}. Vulnerabilidade:")
+            for chave, valor in vulnerabilidade.items():
+                if chave == "severidade":
+                    print(f"{chave.capitalize()}: {Severidade_Extenso(valor).name}")
+                else:
+                    print(f"{chave.capitalize()}: {valor}")
+            print("")
 
 try: #LEITURA DO JSON INICIAL PARA CARREGAR A LISTA DE ATIVOS CADASTRADOS E SETAR NA VARIAVEL GLOBAL "LISTA_ATIVO"
     with open("arquivoativos.json", "r", encoding="utf-8") as arquivolista:
@@ -212,30 +239,16 @@ Escolha uma opção: """)
             else:
                 for ativo in lista_ativos:
                     if ativo["id"] == id_digitado:
+
                         print("-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-")
                         print("")
-                        print(f"ID: {ativo['id']}")
-                        print(f"Nome: {ativo['nome']}")
-                        print(f"Responsável: {ativo['responsavel']}")
-                        print(f"Setor: {ativo['setor']}")
-                        print(f"Tipo: {TiposDeAtivos(ativo['tipo']).name}") 
-                        # essa parte caça dentro do dicionario "ativo" o valor da key "tipo",
-                        # manda o valor pra enumeracao e procura o nome para tal valor
-
+                        Exibe_Dados_ativo(ativo)
                         print("")
+
                         if len(ativo['vulnerabilidades']) == 0:
                             print("Nenhuma vulnerabilidade cadastrada.")
                         else:
-                            print(f"VULNERABILIDADES: ({len(ativo['vulnerabilidades'])})")
-                            print("")
-                            for posicao, vulnerabilidade in enumerate(ativo['vulnerabilidades'], start=1):
-                                print(f"{posicao}. Vulnerabilidade:")
-                                for chave, valor in vulnerabilidade.items():
-                                    if chave == "severidade":
-                                        print(f"{chave.capitalize()}: {Severidade_Extenso(valor).name}")
-                                    else:
-                                        print(f"{chave.capitalize()}: {valor}")
-                                print("")
+                            Exibe_Vulnerabilidades_ativo(ativo)
 
         elif busca_opcao == 2: 
             nome_digitado = input("Digite o nome do ativo que deseja buscar: ").strip()
@@ -248,28 +261,14 @@ Escolha uma opção: """)
                     if ativo["nome"].lower() == nome_digitado.lower():
                         # os lower() é só pra garantir que ambos textos estejam minusculos, ou seja, iguais
                         print("-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-")
-                        print(f"ID: {ativo['id']}")
-                        print(f"Nome: {ativo['nome']}")
-                        print(f"Responsável: {ativo['responsavel']}")
-                        print(f"Setor: {ativo['setor']}")
-                        print(f"Tipo: {TiposDeAtivos(ativo['tipo']).name}") 
-                        # essa parte caça dentro do dicionario "ativo" o valor da key "tipo",
-                        # manda o valor pra enumeracao e procura o nome para tal valor
-                        
+                        print("")
+                        Exibe_Dados_ativo(ativo)
+
                         print("")
                         if len(ativo['vulnerabilidades']) == 0:
                             print("Nenhuma vulnerabilidade cadastrada.")
                         else:
-                            print(f"VULNERABILIDADES: ({len(ativo['vulnerabilidades'])})")
-                            print("")
-                            for posicao, vulnerabilidade in enumerate(ativo['vulnerabilidades'], start=1):
-                                print(f"{posicao}. Vulnerabilidade:")
-                                for chave, valor in vulnerabilidade.items():
-                                    if chave == "severidade":
-                                        print(f"{chave.capitalize()}: {Severidade_Extenso(valor).name}")
-                                    else:
-                                        print(f"{chave.capitalize()}: {valor}")
-                                print("")
+                            Exibe_Vulnerabilidades_ativo(ativo)
 
         elif busca_opcao == 3:
             continue
@@ -382,6 +381,7 @@ Qual ativo você deseja remover?
                     lista_ativos.remove(ativo)
                     encontrado = True
                     if salvar_arquivos(lista_ativos):
+                        print("")
                         print("Ativo removido com sucesso!")
                     break
 
