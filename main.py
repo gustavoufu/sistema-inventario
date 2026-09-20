@@ -7,6 +7,11 @@ class TiposDeAtivos(Enum):
     Roteador = 3
     Aplicativo = 4
 
+class Severidade_Extenso(Enum):
+    Baixa = 1
+    Mdia = 2
+    Alta = 3
+    Crítica = 4
 
 def salvar_arquivos(lista_ativos): #SALVA LISTA DE ATIVO NO ARQUIVO
     try:
@@ -38,6 +43,7 @@ def pedir_input(mensagem): #PEDE TEXTO E VERIFICA SE É VAZIO
         else:
             return texto
 
+        
 def pedir_severidade():  # PEDE A SEVERIDADE E VERIFICA SE É NUMERO INTEIRO DE 1 A 4
     while True:
         try:
@@ -225,7 +231,10 @@ Escolha uma opção: """)
                             for posicao, vulnerabilidade in enumerate(ativo['vulnerabilidades'], start=1):
                                 print(f"{posicao}. Vulnerabilidade:")
                                 for chave, valor in vulnerabilidade.items():
-                                    print(f"{chave}: {valor}")
+                                    if chave == "severidade":
+                                        print(f"{chave.capitalize()}: {Severidade_Extenso(valor).name}")
+                                    else:
+                                        print(f"{chave.capitalize()}: {valor}")
                                 print("")
 
         elif busca_opcao == 2: 
@@ -256,7 +265,10 @@ Escolha uma opção: """)
                             for posicao, vulnerabilidade in enumerate(ativo['vulnerabilidades'], start=1):
                                 print(f"{posicao}. Vulnerabilidade:")
                                 for chave, valor in vulnerabilidade.items():
-                                    print(f"{chave}: {valor}")
+                                    if chave == "severidade":
+                                        print(f"{chave.capitalize()}: {Severidade_Extenso(valor).name}")
+                                    else:
+                                        print(f"{chave.capitalize()}: {valor}")
                                 print("")
 
         elif busca_opcao == 3:
