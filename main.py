@@ -98,12 +98,13 @@ while True:  # EXIBE AS OPÇÕES DO CRUD
 1 - Cadastro de ativos
 2 - Listar ativos
 3 - Buscar e Consultar ativos
-4 - Remover ativos
-5 - Sair
+4 - Atualizar ativos
+5 - Remover ativos
+6 - Sair
 
 Escolha uma opção: """)
     
-    if opcao not in range(1, 6):  # AVISA ERRO -> SE COLOCAR OPCAO QUE NAO EXISTE
+    if opcao not in range(1, 7):  # AVISA ERRO -> SE COLOCAR OPCAO QUE NAO EXISTE
         print("")
         print("ERRO: Essa opção não está disponível...")
         continue
@@ -211,7 +212,104 @@ Escolha uma opção: """)
         if busca_opcao == 3:
             continue
 
-    elif opcao == 4:  #REMOÇÃO DE ATIVOS
+    elif opcao == 4: # ATUALIZAR ATIVOS 
+        
+        if lista_ativos == []:
+            print("""
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                
+Não há ativos cadastrados!""")
+
+        else:
+            print("""
+-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-
+            
+Qual ativo você deseja atualizar?
+                """)
+            for ativo in lista_ativos:
+                print(f"ID:{ativo['id']} - {ativo['nome']}")
+                print("")
+                
+
+            while True:
+                id_escolhido = verificar_int("Digite o ID do ativo que deseja atualizar: ")
+
+                encontrado = False
+                for ativo in lista_ativos:
+                    if ativo['id'] == id_escolhido:
+                        encontrado = True
+                        while True:
+                            print("""
+-=-=-=-=-=- ATUALIZAÇÃO DE ATIVO -=-=-=-=-=-=-
+
+O que deseja atualizar no ativo?
+
+1 - Nome
+2 - Responsável
+3 - Setor
+4 - Tipo
+5 - Voltar ao menu principal
+""")
+                            
+                            escolha_atualizar = verificar_int("Digite uma opção: ")
+                            print("")
+
+                            if escolha_atualizar not in range(1, 6):
+                                print("Essa opção não está disponível!")
+                                continue
+
+                            elif escolha_atualizar == 1:
+                                print(f"OBS: O nome atual é {ativo['nome']}")
+                                ativo['nome'] = pedir_nome()
+                                try:  # ARMAZENA O NOVO NOME NO ARQUIVO COM A LISTA DE ATIVOS
+                                    with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
+                                        json.dump(lista_ativos, arquivolista)
+                                        print("Nome atualizado com sucesso!")
+                                except OSError:
+                                    print("Não foi possível salvar os dados no arquivo.")
+
+                            elif escolha_atualizar == 2:
+                                print(f"OBS: O responsável atual é {ativo['responsavel']}")
+                                ativo['responsavel'] = pedir_responsavel()
+                                try:
+                                    with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
+                                        json.dump(lista_ativos, arquivolista)
+                                        print("Responsável atualizado com sucesso!")
+                                except OSError:
+                                    print("Não foi possível salvar os dados no arquivo.")
+
+                            elif escolha_atualizar == 3:
+                                print(f"OBS: O setor responsável atual é {ativo['setor']}")
+                                ativo['setor'] = pedir_setor()
+                                try:
+                                    with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
+                                        json.dump(lista_ativos, arquivolista)
+                                        print("Setor atualizado com sucesso!")
+                                except OSError:
+                                    print("Não foi possível salvar os dados no arquivo.")
+
+                            elif escolha_atualizar == 4:
+                                print(f"OBS: O ativo atual é do tipo {ativo['tipo']}")
+                                print("")
+                                exibir_tipos_de_ativos()
+                                ativo['tipo'] = pedir_tipo_de_ativo()
+                                try:
+                                    with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
+                                        json.dump(lista_ativos, arquivolista)
+                                        print("Tipo atualizado com sucesso!")
+                                except OSError:
+                                    print("Não foi possível salvar os dados no arquivo.")
+
+                            elif escolha_atualizar == 5:
+                                break
+
+                if encontrado:
+                    break 
+
+                if not encontrado:
+                    print("Esse ID não está cadastrado!")
+            
+    elif opcao == 5:  #REMOÇÃO DE ATIVOS
         if lista_ativos == []:
             print("""
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -226,7 +324,7 @@ Qual ativo você deseja remover?
     """)
         for ativo in lista_ativos:
             print(f"ID:{ativo['id']} - {ativo['nome']}")
-        print("")
+            print("")
 
         while True:  # CRIA UM LOOP PARA SELECIONAR UM ID DE ATIVO VALIDA PARA EXCLUIR
             escolha_rem = verificar_int("Digite o ID do ativo a ser removido: ")
@@ -242,6 +340,7 @@ Qual ativo você deseja remover?
 
             if not encontrado:
                 print("Esse ID não foi encontrado!")
+                continue
 
             try:  # ARMAZENA A NOVA MODIFICACAO NO ARQUIVO COM A LISTA DE ATIVOS
                 with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
@@ -250,6 +349,6 @@ Qual ativo você deseja remover?
                 print("Não foi possível salvar os dados no arquivo.")
             break
 
-    elif opcao == 5: #SAIR DO PROGRAMA
+    elif opcao == 6: #SAIR DO PROGRAMA
         break
         
