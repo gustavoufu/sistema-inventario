@@ -29,35 +29,14 @@ def verificar_int(mensagem):  # VERIFICAR INT É LIGADO A UMA MENSAGEM INPUT
             return inteiro
 
 
-def pedir_nome(mensagem): #PEDE O NOME E VERIFICA SE É VAZIO
+def pedir_input(mensagem): #PEDE TEXTO E VERIFICA SE É VAZIO
     while True:
-        nome = input(mensagem).strip()
-        if nome == "":
-            print("ERRO, digite um nome válido...")
+        texto = input(mensagem).strip()
+        if texto == "":
+            print("ERRO, digite um texto válido...")
             continue
         else:
-            return nome
-
-
-def pedir_responsavel():  # PEDE O RESPONSAVEL E VERIFICA SE É VAZIO
-    while True:
-        responsavel = input("Digite o responsável pelo ativo: ").strip()
-        if responsavel == "":
-            print("ERRO, digite um nome válido...")
-            continue
-        else:
-            return responsavel
-
-
-def pedir_setor():  # PEDE O SETOR E VERIFICA SE É VAZIO
-    while True:
-        setor = input("Digite o setor responsável: ").strip()
-        if setor == "":
-            print("ERRO, digite um nome válido...")
-            continue
-        else:
-            return setor
-
+            return texto
 
 def pedir_severidade():  # PEDE A SEVERIDADE E VERIFICA SE É NUMERO INTEIRO DE 1 A 4
     while True:
@@ -131,9 +110,9 @@ Escolha uma opção: """)
 
         dados_ativo_novo = { #CADASTRO DE NOVO ATIVO COM DICIONARIO
             "id": novo_id,
-            "nome": pedir_nome(mensagem="Digite o nome do ativo: "),
-            "responsavel": pedir_responsavel(),
-            "setor": pedir_setor(),
+            "nome": pedir_input(mensagem="Digite o nome do ativo: "),
+            "responsavel": pedir_input(mensagem="Digite o responsável pelo ativo: "),
+            "setor": pedir_input(mensagem="Digite o setor responsável: "),
             "tipo": exibir_tipos_de_ativos() or pedir_tipo_de_ativo(),
             "vulnerabilidades": [],
         }
@@ -149,10 +128,10 @@ Escolha uma opção: """)
             print("Não há ativos cadastrados!")
             continue
         else:
+            print("")
+            print("ATIVOS CADASTRADOS: ")
+            print("")
             for ativo in lista_ativos:
-                print("")
-                print("ATIVOS CADASTRADOS: ")
-                print("")
                 print(f"ID:{ativo['id']} - {ativo['nome']}")
                 print("")
 
@@ -164,11 +143,11 @@ Escolha uma opção: """)
                     if ativo['id'] == escolha_id:
                         encontrado = True
 
-                        nome = pedir_nome(mensagem="Digite um nome para a vulnerabilidade: ")
-                        descricao = input("Digite uma descrição: ")
-                        categoria = input("Digite um categoria: ")
+                        nome = pedir_input(mensagem="Digite um nome para a vulnerabilidade: ")
+                        descricao = pedir_input("Digite uma descrição: ")
+                        categoria = pedir_input("Digite uma categoria: ")
                         severidade = pedir_severidade()
-                        status = input("Status de tratamento: ")
+                        status = pedir_input("Status de tratamento: ")
 
                         vulne_nova = {'nome': nome,
                                       'descricao': descricao,
@@ -331,20 +310,20 @@ O que deseja atualizar no ativo?
 
                             elif escolha_atualizar == 1:
                                 print(f"OBS: O nome atual é {ativo['nome']}")
-                                ativo['nome'] = pedir_nome(mensagem="Digite o novo nome do ativo: ")
+                                ativo['nome'] = pedir_input(mensagem="Digite o novo nome do ativo: ")
                                 if salvar_arquivos(lista_ativos):
                                     print("Nome alterado com sucesso!")
                                 
 
                             elif escolha_atualizar == 2:
                                 print(f"OBS: O responsável atual é {ativo['responsavel']}")
-                                ativo['responsavel'] = pedir_responsavel()
+                                ativo['responsavel'] = pedir_input(mensagem="Digite o responsável pelo ativo: ")
                                 if salvar_arquivos(lista_ativos):
                                     print("Responsável alterado com sucesso!")
 
                             elif escolha_atualizar == 3:
                                 print(f"OBS: O setor responsável atual é {ativo['setor']}")
-                                ativo['setor'] = pedir_setor()
+                                ativo['setor'] = pedir_input(mensagem="Digite o setor responsável: ")
                                 if salvar_arquivos(lista_ativos):
                                     print("Setor alterado com sucesso!")
 
