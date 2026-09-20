@@ -120,7 +120,7 @@ Escolha uma opção: """)
         print("ERRO: Essa opção não está disponível...")
         continue
 
-    elif opcao == 1:  # CADASTRO DE NOVO ATIVO
+    elif opcao == 1: # CADASTRO DE NOVO ATIVO
         print("")
         print("-=-=-=-=-=- CADASTRO DE NOVO ATIVO -=-=-=-=-=-=-")
         print("")
@@ -143,7 +143,7 @@ Escolha uma opção: """)
         if salvar_arquivos(lista_ativos):
             print("Ativo cadastrado com sucesso!")
 
-    elif opcao == 2:  # CADASTRO DE VULNERABILIDADES
+    elif opcao == 2: # CADASTRO DE VULNERABILIDADES
 
         if lista_ativos == []:
             print("Não há ativos cadastrados!")
@@ -189,7 +189,7 @@ Escolha uma opção: """)
                       print("Esse ID não está cadastrado!")
                       continue     
 
-    elif opcao == 3:  # LISTAGEM DE ATIVOS CADASTRADOS
+    elif opcao == 3: # LISTAGEM DE ATIVOS CADASTRADOS
         print("")
         if lista_ativos == []:
             print("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
@@ -345,7 +345,7 @@ O que deseja atualizar no ativo?
                 if not encontrado:
                     print("Esse ID não está cadastrado!")
 
-    elif opcao == 6:  #REMOÇÃO DE ATIVOS
+    elif opcao == 6: # REMOÇÃO DE ATIVOS
         if lista_ativos == []:
             print("""
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -381,6 +381,6 @@ Qual ativo você deseja remover?
 
             break
 
-    elif opcao == 7: #SAIR DO PROGRAMA
+    elif opcao == 7: # SAIR DO PROGRAMA
         break
         
