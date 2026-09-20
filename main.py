@@ -8,6 +8,16 @@ class TiposDeAtivos(Enum):
     Aplicativo = 4
 
 
+def salvar_arquivos(lista_ativos): #SALVA LISTA DE ATIVO NO ARQUIVO
+    try:
+        with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
+            json.dump(lista_ativos, arquivolista)
+            return True
+    except OSError:
+        print("Não foi possível salvar no arquivo!")
+        return False
+
+
 def verificar_int(mensagem):  # VERIFICAR INT É LIGADO A UMA MENSAGEM INPUT
     while True:
         try:
@@ -19,9 +29,9 @@ def verificar_int(mensagem):  # VERIFICAR INT É LIGADO A UMA MENSAGEM INPUT
             return inteiro
 
 
-def pedir_nome(): #PEDE O NOME DO ATIVO E VERIFICA SE É VAZIO
+def pedir_nome(mensagem): #PEDE O NOME E VERIFICA SE É VAZIO
     while True:
-        nome = input("Digite o nome do ativo: ").strip()
+        nome = input(mensagem).strip()
         if nome == "":
             print("ERRO, digite um nome válido...")
             continue
@@ -84,7 +94,7 @@ def pedir_tipo_de_ativo():  # PEDE O TIPO DE ATIVO E VERIFICA SE É NUMERO INTEI
 
 
 
-try: #LEITURA DO JSON INICIAL PARA CARREGAR A LISTA DE ATIVOS CADASTRADOS
+try: #LEITURA DO JSON INICIAL PARA CARREGAR A LISTA DE ATIVOS CADASTRADOS E SETAR NA VARIAVEL GLOBAL "LISTA_ATIVO"
     with open("arquivoativos.json", "r", encoding="utf-8") as arquivolista:
         lista_ativos = json.load(arquivolista)
 except (FileNotFoundError, json.JSONDecodeError):
@@ -96,15 +106,16 @@ while True:  # EXIBE AS OPÇÕES DO CRUD
 -=-=-=-=-=-=-= MENU PRINCIPAL =-=-=-=-=-=--=-=
 
 1 - Cadastro de ativos
-2 - Listar ativos
-3 - Buscar e Consultar ativos
-4 - Atualizar ativos
-5 - Remover ativos
-6 - Sair
+2 - Cadastrar vulnerabilidades
+3 - Listar ativos
+4 - Buscar e Consultar ativos
+5 - Atualizar ativos
+6 - Remover ativos
+7 - Sair
 
 Escolha uma opção: """)
     
-    if opcao not in range(1, 7):  # AVISA ERRO -> SE COLOCAR OPCAO QUE NAO EXISTE
+    if opcao not in range(1, 8):  # AVISA ERRO -> SE COLOCAR OPCAO QUE NAO EXISTE
         print("")
         print("ERRO: Essa opção não está disponível...")
         continue
@@ -120,7 +131,7 @@ Escolha uma opção: """)
 
         dados_ativo_novo = { #CADASTRO DE NOVO ATIVO COM DICIONARIO
             "id": novo_id,
-            "nome": pedir_nome(),
+            "nome": pedir_nome(mensagem="Digite o nome do ativo: "),
             "responsavel": pedir_responsavel(),
             "setor": pedir_setor(),
             "tipo": exibir_tipos_de_ativos() or pedir_tipo_de_ativo(),
@@ -129,16 +140,56 @@ Escolha uma opção: """)
         print("")
         lista_ativos.append(dados_ativo_novo)
 
-        try:  # ARMAZENA A NOVA MODIFICACAO NO ARQUIVO COM A LISTA DE ATIVOS
-            with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
-                json.dump(lista_ativos, arquivolista)
-                print("""-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+        if salvar_arquivos(lista_ativos):
+            print("Ativo cadastrado com sucesso!")
 
-    Ativo cadastrado com sucesso!""")
-        except OSError:
-            print("Não foi possível salvar os dados no arquivo.")
+    elif opcao == 2:  # CADASTRO DE VULNERABILIDADES
 
-    elif opcao == 2:  # LISTAGEM DE ATIVOS CADASTRADOS
+        if lista_ativos == []:
+            print("Não há ativos cadastrados!")
+            continue
+        else:
+            for ativo in lista_ativos:
+                print("")
+                print("ATIVOS CADASTRADOS: ")
+                print("")
+                print(f"ID:{ativo['id']} - {ativo['nome']}")
+                print("")
+
+            while True:
+                escolha_id = verificar_int("Digite o ID do ativo selecionado: ")
+                print("")
+                encontrado = False
+                for ativo in lista_ativos:
+                    if ativo['id'] == escolha_id:
+                        encontrado = True
+
+                        nome = pedir_nome(mensagem="Digite um nome para a vulnerabilidade: ")
+                        descricao = input("Digite uma descrição: ")
+                        categoria = input("Digite um categoria: ")
+                        severidade = pedir_severidade()
+                        status = input("Status de tratamento: ")
+
+                        vulne_nova = {'nome': nome,
+                                      'descricao': descricao,
+                                      'categoria': categoria,
+                                      'severidade': severidade,
+                                      'status': status}
+                        
+                        ativo['vulnerabilidades'].append(vulne_nova)
+
+                        if salvar_arquivos(lista_ativos):
+                            print("Vulnerabilidade cadastrada com sucesso!")
+                        break
+                    
+                if encontrado:
+                    break
+
+                if not encontrado:
+                      print("Esse ID não está cadastrado!")
+                      continue     
+
+    elif opcao == 3:  # LISTAGEM DE ATIVOS CADASTRADOS
         print("")
         if lista_ativos == []:
             print("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
@@ -151,14 +202,14 @@ Escolha uma opção: """)
             for ativo in lista_ativos:
                 print(f"ID:{ativo['id']} - {ativo['nome']}")
 
-    elif opcao == 3: # BUSCA E CONSULTA DE ATIVOS
+    elif opcao == 4: # BUSCA E CONSULTA DE ATIVOS
         print("""
-    -=-=-=-=-=- OPÇÕES =-=-=-=-=-=-
+-=-=-=-=-=- OPÇÕES =-=-=-=-=-=-
 
-    1 - Buscar por ID
-    2 - Buscar por Nome
-    3 - Voltar ao menu principal
-    """)
+1 - Buscar por ID
+2 - Buscar por Nome
+3 - Voltar ao menu principal
+""")
         
         while True:
             busca_opcao = verificar_int("Escolha uma opção: ")
@@ -212,7 +263,7 @@ Escolha uma opção: """)
         if busca_opcao == 3:
             continue
 
-    elif opcao == 4: # ATUALIZAR ATIVOS 
+    elif opcao == 5: # ATUALIZAR ATIVOS 
         
         if lista_ativos == []:
             print("""
@@ -260,45 +311,30 @@ O que deseja atualizar no ativo?
 
                             elif escolha_atualizar == 1:
                                 print(f"OBS: O nome atual é {ativo['nome']}")
-                                ativo['nome'] = pedir_nome()
-                                try:  # ARMAZENA O NOVO NOME NO ARQUIVO COM A LISTA DE ATIVOS
-                                    with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
-                                        json.dump(lista_ativos, arquivolista)
-                                        print("Nome atualizado com sucesso!")
-                                except OSError:
-                                    print("Não foi possível salvar os dados no arquivo.")
+                                ativo['nome'] = pedir_nome(mensagem="Digite o novo nome do ativo: ")
+                                if salvar_arquivos(lista_ativos):
+                                    print("Nome alterado com sucesso!")
+                                
 
                             elif escolha_atualizar == 2:
                                 print(f"OBS: O responsável atual é {ativo['responsavel']}")
                                 ativo['responsavel'] = pedir_responsavel()
-                                try:
-                                    with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
-                                        json.dump(lista_ativos, arquivolista)
-                                        print("Responsável atualizado com sucesso!")
-                                except OSError:
-                                    print("Não foi possível salvar os dados no arquivo.")
+                                if salvar_arquivos(lista_ativos):
+                                    print("Responsável alterado com sucesso!")
 
                             elif escolha_atualizar == 3:
                                 print(f"OBS: O setor responsável atual é {ativo['setor']}")
                                 ativo['setor'] = pedir_setor()
-                                try:
-                                    with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
-                                        json.dump(lista_ativos, arquivolista)
-                                        print("Setor atualizado com sucesso!")
-                                except OSError:
-                                    print("Não foi possível salvar os dados no arquivo.")
+                                if salvar_arquivos(lista_ativos):
+                                    print("Setor alterado com sucesso!")
 
                             elif escolha_atualizar == 4:
                                 print(f"OBS: O ativo atual é do tipo {ativo['tipo']}")
                                 print("")
                                 exibir_tipos_de_ativos()
                                 ativo['tipo'] = pedir_tipo_de_ativo()
-                                try:
-                                    with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
-                                        json.dump(lista_ativos, arquivolista)
-                                        print("Tipo atualizado com sucesso!")
-                                except OSError:
-                                    print("Não foi possível salvar os dados no arquivo.")
+                                if salvar_arquivos(lista_ativos):
+                                    print("Tipo do ativo alterado com sucesso!")
 
                             elif escolha_atualizar == 5:
                                 break
@@ -308,8 +344,8 @@ O que deseja atualizar no ativo?
 
                 if not encontrado:
                     print("Esse ID não está cadastrado!")
-            
-    elif opcao == 5:  #REMOÇÃO DE ATIVOS
+
+    elif opcao == 6:  #REMOÇÃO DE ATIVOS
         if lista_ativos == []:
             print("""
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -334,21 +370,17 @@ Qual ativo você deseja remover?
                 if ativo["id"] == escolha_rem:
                     lista_ativos.remove(ativo)
                     encontrado = True
-                    print("")
-                    print("Ativo removido!")
+                    if salvar_arquivos(lista_ativos):
+                        print("Ativo removido com sucesso!")
                     break
 
             if not encontrado:
                 print("Esse ID não foi encontrado!")
                 continue
 
-            try:  # ARMAZENA A NOVA MODIFICACAO NO ARQUIVO COM A LISTA DE ATIVOS
-                with open("arquivoativos.json", "w", encoding="utf-8") as arquivolista:
-                    json.dump(lista_ativos, arquivolista)
-            except OSError:
-                print("Não foi possível salvar os dados no arquivo.")
+
             break
 
-    elif opcao == 6: #SAIR DO PROGRAMA
+    elif opcao == 7: #SAIR DO PROGRAMA
         break
         
