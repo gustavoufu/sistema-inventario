@@ -23,7 +23,7 @@ def salvar_arquivos(lista_ativos): #SALVA LISTA DE ATIVO NO ARQUIVO
         return False
 
 
-def verificar_int(mensagem):  # VERIFICAR INT É LIGADO A UMA MENSAGEM INPUT
+def verificar_int(mensagem): # VERIFICAR INT É LIGADO A UMA MENSAGEM INPUT
     while True:
         try:
             inteiro = int(input(mensagem))
@@ -34,7 +34,7 @@ def verificar_int(mensagem):  # VERIFICAR INT É LIGADO A UMA MENSAGEM INPUT
             return inteiro
 
 
-def pedir_input(mensagem): #PEDE TEXTO E VERIFICA SE É VAZIO
+def pedir_input(mensagem): # PEDE TEXTO E VERIFICA SE É VAZIO
     while True:
         texto = input(mensagem).strip()
         if texto == "":
@@ -44,7 +44,7 @@ def pedir_input(mensagem): #PEDE TEXTO E VERIFICA SE É VAZIO
             return texto
 
         
-def pedir_severidade():  # PEDE A SEVERIDADE E VERIFICA SE É NUMERO INTEIRO DE 1 A 4
+def pedir_severidade(): # PEDE A SEVERIDADE E VERIFICA SE É NUMERO INTEIRO DE 1 A 4
     while True:
         try:
             severidade = int(input("Digite um nível de severidade [1 até 4]: "))
@@ -58,15 +58,15 @@ def pedir_severidade():  # PEDE A SEVERIDADE E VERIFICA SE É NUMERO INTEIRO DE 
             return severidade
 
 
-def exibir_tipos_de_ativos():  # EXIBE OS TIPOS DE ATIVOS DISPONIVEIS
+def exibir_tipos_de_ativos(): # EXIBE OS TIPOS DE ATIVOS DISPONIVEIS
     print("")
-    print("-=-=-=-=- Tipos de ativos disponíveis -=-=-=-=-")
+    print("-=-=-=-=- TIPO DE ATIVOS DISPONÍVEIS -=-=-=-=-")
     print("")
     for tipo in TiposDeAtivos:
         print(f"{tipo.value} - {tipo.name}")
 
 
-def pedir_tipo_de_ativo():  # PEDE O TIPO DE ATIVO E VERIFICA SE É NUMERO INTEIRO DE 1 A 4
+def pedir_tipo_de_ativo(): # PEDE O TIPO DE ATIVO E VERIFICA SE É NUMERO INTEIRO DE 1 A 4
     while True:
         try:
             print("")
@@ -81,7 +81,7 @@ def pedir_tipo_de_ativo():  # PEDE O TIPO DE ATIVO E VERIFICA SE É NUMERO INTEI
             return tipo
 
 
-def Exibe_Dados_ativo(ativo):
+def Exibe_Dados_ativo(ativo): # EXIBE OS DADOS DO ATIVO SELECIONADO
     print(f"ID: {ativo['id']}")
     print(f"Nome: {ativo['nome']}")
     print(f"Responsável: {ativo['responsavel']}")
@@ -91,7 +91,7 @@ def Exibe_Dados_ativo(ativo):
     # manda o valor pra enumeracao e procura o nome para tal valor
 
 
-def Exibe_Vulnerabilidades_ativo(ativo):
+def Exibe_Vulnerabilidades_ativo(ativo): # EXIBE AS VULNERABILIDADES DO ATIVO SELECIONADO
     if len(ativo['vulnerabilidades']) == 0:
         print("Nenhuma vulnerabilidade cadastrada.")
     else:
@@ -134,7 +134,7 @@ Escolha uma opção: """)
 
     elif opcao == 1: # CADASTRO DE NOVO ATIVO
         print("")
-        print("-=-=-=-=-=- CADASTRO DE NOVO ATIVO -=-=-=-=-=-=-")
+        print("=-=-=-=-=- CADASTRO DE NOVO ATIVO -=-=-=-=-=-=")
         print("")
         if lista_ativos:
             novo_id = max(ativo["id"] for ativo in lista_ativos) + 1
@@ -162,7 +162,7 @@ Escolha uma opção: """)
             continue
         else:
             print("")
-            print("ATIVOS CADASTRADOS: ")
+            print("=-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-=")
             print("")
             for ativo in lista_ativos:
                 print(f"ID:{ativo['id']} - {ativo['nome']}")
@@ -191,6 +191,7 @@ Escolha uma opção: """)
                         ativo['vulnerabilidades'].append(vulne_nova)
 
                         if salvar_arquivos(lista_ativos):
+                            print("")
                             print("Vulnerabilidade cadastrada com sucesso!")
                         break
                     
@@ -204,19 +205,19 @@ Escolha uma opção: """)
     elif opcao == 3: # LISTAGEM DE ATIVOS CADASTRADOS
         print("")
         if lista_ativos == []:
-            print("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
+            print("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
             print("")
             print("Não há ativos cadastrados!")
             continue
         else:
-            print("-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-")
+            print("=-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-=")
             print("")
             for ativo in lista_ativos:
                 print(f"ID:{ativo['id']} - {ativo['nome']}")
 
     elif opcao == 4: # BUSCA E CONSULTA DE ATIVOS
         print("""
--=-=-=-=-=- OPÇÕES =-=-=-=-=-=-
+=-=-=-=-=-=-=-=-=-= OPÇÕES =-=-=-=-=-=-=-=-=-=
 
 1 - Buscar por ID
 2 - Buscar por Nome
@@ -240,7 +241,7 @@ Escolha uma opção: """)
                 for ativo in lista_ativos:
                     if ativo["id"] == id_digitado:
 
-                        print("-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-")
+                        print("-=-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-=-")
                         print("")
                         Exibe_Dados_ativo(ativo)
                         print("")
@@ -260,7 +261,7 @@ Escolha uma opção: """)
                 for ativo in lista_ativos:
                     if ativo["nome"].lower() == nome_digitado.lower():
                         # os lower() é só pra garantir que ambos textos estejam minusculos, ou seja, iguais
-                        print("-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-")
+                        print("-=-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-=-")
                         print("")
                         Exibe_Dados_ativo(ativo)
 
@@ -277,13 +278,13 @@ Escolha uma opção: """)
         
         if lista_ativos == []:
             print("""
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
                 
 Não há ativos cadastrados!""")
 
         else:
             print("""
--=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-
+=-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-=
             
 Qual ativo você deseja atualizar?
                 """)
@@ -358,13 +359,13 @@ O que deseja atualizar no ativo?
     elif opcao == 6: # REMOÇÃO DE ATIVOS
         if lista_ativos == []:
             print("""
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     
     Não há ativos cadastrados!""")
             continue
         
         print("""
--=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-
+=-=-=-=-=-=- ATIVOS CADASTRADOS -=-=-=-=-=-=-=
 
 Qual ativo você deseja remover?
     """)
