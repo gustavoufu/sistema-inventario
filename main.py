@@ -222,12 +222,43 @@ Escolha uma opção: """)
             id_digitado = verificar_int("Digite o ID do ativo que deseja buscar: ")
             print("")
             if id_digitado not in [ativo["id"] for ativo in lista_ativos]:
-                print("")
                 print("Esse ID não foi encontrado!")
                 continue
             else:
                 for ativo in lista_ativos:
                     if ativo["id"] == id_digitado:
+                        print("-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-")
+                        print("")
+                        print(f"ID: {ativo['id']}")
+                        print(f"Nome: {ativo['nome']}")
+                        print(f"Responsável: {ativo['responsavel']}")
+                        print(f"Setor: {ativo['setor']}")
+                        print(f"Tipo: {TiposDeAtivos(ativo['tipo']).name}") 
+                        # essa parte caça dentro do dicionario "ativo" o valor da key "tipo",
+                        # manda o valor pra enumeracao e procura o nome para tal valor
+
+                        print("")
+                        if len(ativo['vulnerabilidades']) == 0:
+                            print("Nenhuma vulnerabilidade cadastrada.")
+                        else:
+                            print(f"VULNERABILIDADES: ({len(ativo['vulnerabilidades'])})")
+                            print("")
+                            for posicao, vulnerabilidade in enumerate(ativo['vulnerabilidades'], start=1):
+                                print(f"{posicao}. Vulnerabilidade:")
+                                for chave, valor in vulnerabilidade.items():
+                                    print(f"{chave}: {valor}")
+                                print("")
+
+        elif busca_opcao == 2: 
+            nome_digitado = input("Digite o nome do ativo que deseja buscar: ").strip()
+            print("")
+            if nome_digitado.lower() not in (ativo['nome'].lower() for ativo in lista_ativos):
+                print("Esse nome não pertence a um ativo cadastrado!")
+                continue
+            else:
+                for ativo in lista_ativos:
+                    if ativo["nome"].lower() == nome_digitado.lower():
+                        # os lower() é só pra garantir que ambos textos estejam minusculos, ou seja, iguais
                         print("-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-")
                         print(f"ID: {ativo['id']}")
                         print(f"Nome: {ativo['nome']}")
@@ -236,31 +267,20 @@ Escolha uma opção: """)
                         print(f"Tipo: {TiposDeAtivos(ativo['tipo']).name}") 
                         # essa parte caça dentro do dicionario "ativo" o valor da key "tipo",
                         # manda o valor pra enumeracao e procura o nome para tal valor
-                        print(f"Vulnerabilidades: {ativo['vulnerabilidades']}")
+                        
+                        print("")
+                        if len(ativo['vulnerabilidades']) == 0:
+                            print("Nenhuma vulnerabilidade cadastrada.")
+                        else:
+                            print(f"VULNERABILIDADES: ({len(ativo['vulnerabilidades'])})")
+                            print("")
+                            for posicao, vulnerabilidade in enumerate(ativo['vulnerabilidades'], start=1):
+                                print(f"{posicao}. Vulnerabilidade:")
+                                for chave, valor in vulnerabilidade.items():
+                                    print(f"{chave}: {valor}")
+                                print("")
 
-        elif busca_opcao == 2: 
-            nome_digitado = input("Digite o nome do ativo que deseja buscar: ").strip()
-            encontrado = False
-            # encontrado false serve para, caso nao seja encontrado o nome do ativo, continue false e assim possa rodar o print 
-            # de aviso "nao encontrado"
-            for ativo in lista_ativos:
-                if ativo["nome"].lower() == nome_digitado.lower():
-                    # os lower() é só pra garantir que ambos textos estejam minusculos, ou seja, iguais
-                    print("-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-")
-                    print(f"ID: {ativo['id']}")
-                    print(f"Nome: {ativo['nome']}")
-                    print(f"Responsável: {ativo['responsavel']}")
-                    print(f"Setor: {ativo['setor']}")
-                    print(f"Tipo: {TiposDeAtivos(ativo['tipo']).name}") 
-                    # essa parte caça dentro do dicionario "ativo" o valor da key "tipo",
-                    # manda o valor pra enumeracao e procura o nome para tal valor
-                    print(f"Vulnerabilidades: {ativo['vulnerabilidades']}")
-                    print("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
-                    encontrado = True
-            if not encontrado:
-                print("Esse nome não foi encontrado!")
-
-        if busca_opcao == 3:
+        elif busca_opcao == 3:
             continue
 
     elif opcao == 5: # ATUALIZAR ATIVOS 
