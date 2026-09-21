@@ -366,7 +366,7 @@ O que deseja atualizar no ativo?
             print(f"""
 {TITULO}-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-={NORMAL}
     
-    Não há ativos cadastrados!""")
+Não há ativos cadastrados!""")
             continue
         
         print(f"""
@@ -399,5 +399,7 @@ Qual ativo você deseja remover?
             break
 
     elif opcao == 7: # SAIR DO PROGRAMA
+        print("")
+        print(f"{VERDE}Saindo do sistema. Até logo!{NORMAL}")
         break
         
