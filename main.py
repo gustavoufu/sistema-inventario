@@ -257,7 +257,7 @@ Escolha uma opção: """)
                             Exibe_Vulnerabilidades_ativo(ativo)
 
         elif busca_opcao == 2: 
-            nome_digitado = input("Digite o nome do ativo que deseja buscar: ").strip()
+            nome_digitado = pedir_input("Digite o nome do ativo que deseja buscar: ").strip()
             print("")
             if nome_digitado.lower() not in (ativo['nome'].lower() for ativo in lista_ativos):
                 print(f"{VERMELHO}Esse nome não pertence a um ativo cadastrado!{NORMAL}")
