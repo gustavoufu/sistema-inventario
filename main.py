@@ -390,23 +390,46 @@ Qual ativo você deseja remover?
 
         while True:  # CRIA UM LOOP PARA SELECIONAR UM ID DE ATIVO VALIDA PARA EXCLUIR
             escolha_rem = verificar_int("Digite o ID do ativo a ser removido: ")
+            print("")
             
             encontrado = False
             for ativo in lista_ativos:
                 if ativo["id"] == escolha_rem:
-                    lista_ativos.remove(ativo)
                     encontrado = True
-                    if salvar_arquivos(lista_ativos):
+
+                    print(f"{TITULO}=-=-=-=-=-= INFORMAÇÕES DO ATIVO =-=-=-=-=-=-={NORMAL}")
+                    print("")
+                    Exibe_Dados_ativo(ativo)
+                    print("")
+
+                    if len(ativo['vulnerabilidades']) == 0:
+                        print("Nenhuma vulnerabilidade cadastrada.")
                         print("")
-                        print(f"{VERDE}Ativo removido com sucesso!{NORMAL}")
-                    break
+                    else:
+                        Exibe_Vulnerabilidades_ativo(ativo)
+
+                    while True:
+                        print("Atenção: ao excluir este ativo, todas as vulnerabilidades associadas a ele também serão removidas.")
+                        confirmação = pedir_input("Confirma a exclusão? [S/N] ").lower()
+                        print("")
+                        if confirmação == "s":
+                            lista_ativos.remove(ativo)
+                            if salvar_arquivos(lista_ativos):
+                                print(f"{VERDE}Ativo removido com sucesso!{NORMAL}")
+                            break
+                        elif confirmação == "n":
+                            print("Exclusão cancelada")
+                            break
+                        else:
+                            print(f"{VERMELHO}Essa opção não está disponível, Tente novamente!{NORMAL}")
+                            print("")
+                            continue
 
             if not encontrado:
                 print(f"{VERMELHO}Esse ID não foi encontrado!{NORMAL}")
                 continue
 
-
-            break
+            if encontrado: break
 
     elif opcao == 7: # SAIR DO PROGRAMA
         print("")
