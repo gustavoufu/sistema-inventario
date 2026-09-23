@@ -86,7 +86,7 @@ def pedir_tipo_de_ativo(): # PEDE O TIPO DE ATIVO E VERIFICA SE É NUMERO INTEIR
             return tipo
 
 
-def Exibe_Dados_ativo(ativo): # EXIBE OS DADOS DO ATIVO SELECIONADO
+def exibe_dados_ativo(ativo): # EXIBE OS DADOS DO ATIVO SELECIONADO
     print(f"ID: {ativo['id']}")
     print(f"Nome: {ativo['nome']}")
     print(f"Responsável: {ativo['responsavel']}")
@@ -96,7 +96,7 @@ def Exibe_Dados_ativo(ativo): # EXIBE OS DADOS DO ATIVO SELECIONADO
     # manda o valor pra enumeracao e procura o nome para tal valor
 
 
-def Exibe_Vulnerabilidades_ativo(ativo): # EXIBE AS VULNERABILIDADES DO ATIVO SELECIONADO
+def exibe_vulnerabilidades_ativo(ativo): # EXIBE AS VULNERABILIDADES DO ATIVO SELECIONADO
     if len(ativo['vulnerabilidades']) == 0:
         print("Nenhuma vulnerabilidade cadastrada.")
     else:
@@ -254,13 +254,13 @@ Escolha uma opção: """)
 
                             print(f"{TITULO}-=-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-=-{NORMAL}")
                             print("")
-                            Exibe_Dados_ativo(ativo)
+                            exibe_dados_ativo(ativo)
                             print("")
 
                             if len(ativo['vulnerabilidades']) == 0:
                                 print("Nenhuma vulnerabilidade cadastrada.")
                             else:
-                                Exibe_Vulnerabilidades_ativo(ativo)
+                                exibe_vulnerabilidades_ativo(ativo)
 
             elif busca_opcao == 2: 
                 nome_digitado = pedir_input("Digite o nome do ativo que deseja buscar: ").strip()
@@ -274,13 +274,13 @@ Escolha uma opção: """)
                             # os lower() é só pra garantir que ambos textos estejam minusculos, ou seja, iguais
                             print(f"{TITULO}-=-=-=-=-=-=- ATIVO ENCONTRADO -=-=-=-=-=-=-=-{NORMAL}")
                             print("")
-                            Exibe_Dados_ativo(ativo)
+                            exibe_dados_ativo(ativo)
 
                             print("")
                             if len(ativo['vulnerabilidades']) == 0:
                                 print("Nenhuma vulnerabilidade cadastrada.")
                             else:
-                                Exibe_Vulnerabilidades_ativo(ativo)
+                                exibe_vulnerabilidades_ativo(ativo)
 
             elif busca_opcao == 3:
                 continue
@@ -399,14 +399,14 @@ Qual ativo você deseja remover?
 
                     print(f"{TITULO}=-=-=-=-=-= INFORMAÇÕES DO ATIVO =-=-=-=-=-=-={NORMAL}")
                     print("")
-                    Exibe_Dados_ativo(ativo)
+                    exibe_dados_ativo(ativo)
                     print("")
 
                     if len(ativo['vulnerabilidades']) == 0:
                         print("Nenhuma vulnerabilidade cadastrada.")
                         print("")
                     else:
-                        Exibe_Vulnerabilidades_ativo(ativo)
+                        exibe_vulnerabilidades_ativo(ativo)
 
                     while True:
                         print("Atenção: ao excluir este ativo, todas as vulnerabilidades associadas a ele também serão removidas.")
