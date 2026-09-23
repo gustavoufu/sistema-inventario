@@ -1,3 +1,28 @@
-Aqui eu vou criar meu primeiro código para o sistema de inventário de ativos de TI
+# Sistema de Inventário de Ativos
 
-O projeto deve ser capaz de cadastrar, consultar, atualizar e remover ativos de TI
+## Sobre o projeto
+
+Sistema de inventário de ativos de TI desenvolvido em Python. Ele permite cadastrar e consultar ativos, além de registrar as vulnerabilidades associadas a cada um.
+
+## Funcionalidades
+
+- Cadastrar, listar, buscar, atualizar e remover ativos.
+- Buscar ativos por ID ou nome.
+- Cadastrar vulnerabilidades em um ativo e consultá-las junto com seus dados.
+- Confirmar a remoção de um ativo após avisar que suas vulnerabilidades também serão excluídas.
+
+## Como executar
+
+É necessário ter Python instalado. No terminal, entre na pasta do projeto e execute:
+
+```bash
+python main.py
+```
+
+O programa apresenta um menu no terminal. Digite o número da opção desejada e siga as instruções exibidas.
+
+## Dados armazenados
+
+Os ativos são guardados no arquivo `arquivoativos.json`. Ao iniciar, o programa carrega esse arquivo para a lista `lista_ativos`. Após operações que alteram os dados, ele tenta salvar a lista atualizada no arquivo.
+
+Cada ativo possui ID, nome, responsável, setor, tipo e uma lista de vulnerabilidades. Cada vulnerabilidade possui nome, descrição, categoria, severidade e status de tratamento.
