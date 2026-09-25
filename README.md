@@ -1,52 +1,39 @@
-Sistema de Inventário de Ativos
-Sobre o projeto
+# Sistema de Inventario de Ativos
 
-Sistema de inventário de ativos de TI desenvolvido em Python. Ele permite cadastrar e consultar ativos, além de registrar as vulnerabilidades associadas a cada um.
+## Sobre o projeto
 
-Funcionalidades
+O Sistema de Inventario de Ativos e uma aplicacao desenvolvida em Python voltada para o gerenciamento de ativos de TI e o acompanhamento de suas respectivas vulnerabilidades de seguranca. O programa opera diretamente pelo terminal e utiliza um arquivo local em formato JSON (`arquivoativos.json`) para a persistencia automatica dos dados, carregando as informacoes ao iniciar e atualizando-as apos cada operacao realizada.
 
-Cadastrar, listar, buscar, atualizar e remover ativos.
+## Funcionalidades
 
-Buscar ativos por ID ou nome.
+* **Gestao de Ativos:** Cadastro, listagem, busca, atualizacao e remocao de ativos no sistema.
+* **Busca Avancada:** Localizacao de ativos especificos utilizando criterios como ID ou nome.
+* **Controle de Vulnerabilidades:** Registro de vulnerabilidades associadas diretamente a cada ativo cadastrado.
+* **Consulta de Vulnerabilidades:** Visualizacao detalhada das falhas de seguranca vinculadas a cada item do inventario.
+* **Seguranca na Exclusao:** Etapa de confirmacao previa antes da remocao de um ativo, garantindo tambem a exclusao controlada de suas vulnerabilidades associadas.
 
-Cadastrar vulnerabilidades em um ativo e consultá-las junto com seus dados.
+## Como obter o projeto
 
-Confirmar a remoção de um ativo após avisar que suas vulnerabilidades também serão excluídas.
+Para clonar e configurar o repositorio em sua maquina local, abra o terminal e execute os comandos abaixo, que nao exigem autenticacao previa:
 
-Como executar
-
-É necessário ter Python instalado. No terminal, entre na pasta do projeto e execute:
-
-python main.py
-
-
-O programa apresenta um menu no terminal. Digite o número da opção desejada e siga as instruções exibidas.
-
-Como obter o projeto
-
-O repositório é público, portanto não é necessário possuir uma conta no GitHub ou estar autenticado para clonar o projeto.
-
-No terminal, execute:
-
+```bash
 git clone https://github.com/gustavoufu/sistema-inventario.git
-
-
-Depois, entre na pasta do projeto:
-
 cd sistema-inventario
 
+```
 
-Em seguida, execute o programa:
+## Como executar
 
+Certifique-se de possuir o Python instalado em seu ambiente. Com o repositorio clonado e acessando o diretorio do projeto atraves do terminal, execute o seguinte comando:
+
+```bash
 python main.py
 
+```
 
-Caso o comando python não esteja disponível, pode ser necessário utilizar:
+## Dados armazenados
 
-python3 main.py
+O sistema estrutura as informacoes utilizando dois componentes principais salvos no arquivo `arquivoativos.json`:
 
-Dados armazenados
-
-Os ativos são guardados no arquivo arquivoativos.json. Ao iniciar, o programa carrega esse arquivo para a lista lista_ativos. Após operações que alteram os dados, ele tenta salvar a lista atualizada no arquivo.
-
-Cada ativo possui ID, nome, responsável, setor, tipo e uma lista de vulnerabilidades. Cada vulnerabilidade possui nome, descrição, categoria, severidade e status de tratamento.
+* **Ativos:** Cada registro e composto por ID, nome, responsavel, setor, tipo e uma lista dedicada de vulnerabilidades.
+* **Vulnerabilidades:** Cada item vinculado ao ativo possui nome, descricao, categoria, severidade e status de tratamento.
