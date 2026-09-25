@@ -22,6 +22,25 @@ def cadastrar_ativo(lista_ativos):
         "vulnerabilidades": [],
     }
     print()
+
+    while True:
+        escolha = pedir_input("Deseja cadastrar uma vulnerabilidade inicial? [S/N] ").lower()
+        if escolha == "s":
+            vulne_nova = {
+                'nome': pedir_input("Digite um nome para a vulnerabilidade: "),
+                'descricao': pedir_input("Digite uma descrição: "),
+                'categoria': pedir_input("Digite uma categoria: "),
+                'severidade': pedir_severidade(),
+                'status': pedir_input("Status de tratamento: ")}
+            dados_ativo_novo['vulnerabilidades'].append(vulne_nova)
+            break
+        elif escolha == "n":
+            break
+        else:
+            print(f"{VERMELHO}Essa opção não está disponível!{NORMAL}")
+            continue
+
+    print()
     lista_ativos.append(dados_ativo_novo)
 
     if salvar_arquivos(lista_ativos):
@@ -46,19 +65,12 @@ def cadastrar_vulnerabilidade(lista_ativos):
             for ativo in lista_ativos:
                 if ativo['id'] == escolha_id:
                     encontrado = True
-
-                    nome = pedir_input("Digite um nome para a vulnerabilidade: ")
-                    descricao = pedir_input("Digite uma descrição: ")
-                    categoria = pedir_input("Digite uma categoria: ")
-                    severidade = pedir_severidade()
-                    status = pedir_input("Status de tratamento: ")
-
-                    vulne_nova = {'nome': nome,
-                                    'descricao': descricao,
-                                    'categoria': categoria,
-                                    'severidade': severidade,
-                                    'status': status} 
-                    
+                    vulne_nova = {
+                        'nome': pedir_input("Digite um nome para a vulnerabilidade: "),
+                        'descricao': pedir_input("Digite uma descrição: "),
+                        'categoria': pedir_input("Digite uma categoria: "),
+                        'severidade': pedir_severidade(),
+                        'status': pedir_input("Status de tratamento: ")} 
                     ativo['vulnerabilidades'].append(vulne_nova)
 
                     if salvar_arquivos(lista_ativos):
