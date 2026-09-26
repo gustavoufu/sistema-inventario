@@ -4,6 +4,19 @@ from validacoes import (verificar_int, pedir_input, pedir_severidade,
     exibir_tipos_de_ativos, pedir_tipo_de_ativo, 
     exibe_dados_ativo, exibe_vulnerabilidades_ativo)
 
+def mostrar_menu():
+    print()
+    print(f"{TITULO}-=-=-=-=-=-=-= MENU PRINCIPAL =-=-=-=-=-=--=-={NORMAL}")
+    print()
+    print("1 - Cadastro de ativos")
+    print("2 - Cadastrar vulnerabilidades")
+    print("3 - Listar ativos")
+    print("4 - Buscar e Consultar ativos")
+    print("5 - Atualizar ativos")
+    print("6 - Remover ativos")
+    print("7 - Sair")
+    print()
+
 def cadastrar_ativo(lista_ativos):
     print()
     print(f"{TITULO}=-=-=-=-=- CADASTRO DE NOVO ATIVO -=-=-=-=-=-={NORMAL}")
